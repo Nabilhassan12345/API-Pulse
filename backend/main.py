@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import rest, websocket
+from routers import rest, websocket, health
 from config import settings
 from exceptions import add_exception_handlers
 from core.middleware import RequestTracingMiddleware
@@ -21,6 +21,7 @@ app.add_middleware(RequestTracingMiddleware)
 # Register routers
 app.include_router(rest.router)
 app.include_router(websocket.router)
+app.include_router(health.router)
 
 # Register exception handlers
 add_exception_handlers(app)
