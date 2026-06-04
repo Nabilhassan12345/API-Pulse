@@ -16,6 +16,24 @@ function App() {
     active_connections: 0
   });
   const [chartData, setChartData] = useState([]);
+  const [healthMetrics, setHealthMetrics] = useState({ cpu_percent: 0, memory_percent: 0 });
+
+  useEffect(() => {
+    // Poll Health Endpoint
+    const fetchHealth = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/health');
+        const data = await res.json();
+        setHealthMetrics(data.metrics);
+      } catch (e) {
+        console.error("Health probe failed:", e);
+      }
+    };
+    
+    fetchHealth();
+    const interval = setInterval(fetchHealth, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     // Connect to WebSocket
@@ -69,9 +87,15 @@ function App() {
           <Activity className="logo-icon" size={32} />
           API-Pulse
         </div>
-        <div className={`status-badge ${isRunning ? 'status-running' : 'status-idle'}`}>
-          {isRunning && <div className="pulse-dot"></div>}
-          {isRunning ? 'TEST IN PROGRESS' : 'SYSTEM IDLE'}
+        <div style={{display: 'flex', gap: '16px', alignItems: 'center'}}>
+          <div style={{fontSize: '12px', color: 'var(--text-muted)', display: 'flex', gap: '12px'}}>
+            <span>CPU: <strong style={{color: healthMetrics.cpu_percent > 80 ? 'var(--accent)' : 'var(--text-main)'}}>{healthMetrics.cpu_percent}%</strong></span>
+            <span>RAM: <strong style={{color: healthMetrics.memory_percent > 80 ? 'var(--accent)' : 'var(--text-main)'}}>{healthMetrics.memory_percent}%</strong></span>
+          </div>
+          <div className={`status-badge ${isRunning ? 'status-running' : 'status-idle'}`}>
+            {isRunning && <div className="pulse-dot"></div>}
+            {isRunning ? 'TEST IN PROGRESS' : 'SYSTEM IDLE'}
+          </div>
         </div>
       </header>
 
