@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 import time
 from typing import Dict, Any
+from core.logger import logger
 
 class LoadTester:
     def __init__(self):
@@ -68,6 +69,7 @@ class LoadTester:
 
     def start(self, url: str, concurrency: int):
         if not self.is_running:
+            logger.info("Starting load test", extra={"url": url, "concurrency": concurrency})
             # Reset stats
             self.stats = {
                 "total_requests": 0,
@@ -81,6 +83,7 @@ class LoadTester:
             self._task = asyncio.create_task(self._run_test(url, concurrency))
 
     def stop(self):
+        logger.info("Stopping load test", extra={"final_stats": self.stats})
         self.is_running = False
 
     def get_stats(self) -> Dict[str, Any]:

@@ -1,9 +1,7 @@
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-import logging
-
-logger = logging.getLogger(__name__)
+from core.logger import logger
 
 def add_exception_handlers(app: FastAPI):
     @app.exception_handler(Exception)
@@ -16,6 +14,7 @@ def add_exception_handlers(app: FastAPI):
 
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(request: Request, exc: RequestValidationError):
+        logger.warning(f"Validation error: {exc.errors()}")
         return JSONResponse(
             status_code=422,
             content={"status": "error", "message": "Invalid payload", "details": exc.errors()}
