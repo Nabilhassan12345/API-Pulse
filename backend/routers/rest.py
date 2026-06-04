@@ -2,19 +2,16 @@ from fastapi import APIRouter
 from pydantic import BaseModel, HttpUrl, Field
 from services.load_tester import load_tester
 from config import settings
+from schemas.scenario import Scenario
 
-router = APIRouter(prefix="/api")
-
-class TestRequest(BaseModel):
-    url: HttpUrl
-    concurrency: int = Field(ge=1, le=settings.MAX_CONCURRENCY_LIMIT)
+router = APIRouter(prefix="/api", tags=["engine"])
 
 @router.post("/start")
-async def start_test(request: TestRequest):
+async def start_load_test(scenario: Scenario):
     if load_tester.is_running:
         return {"status": "error", "message": "Test is already running"}
-    load_tester.start(str(request.url), request.concurrency)
-    return {"status": "success", "message": f"Started load test on {request.url}"}
+    load_tester.start(scenario)
+    return {"status": "success", "message": "Load test scenario started"}
 
 @router.post("/stop")
 async def stop_test():
