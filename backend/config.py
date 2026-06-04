@@ -4,6 +4,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "API-Pulse Backend"
     CORS_ORIGINS: list[str] = ["*"]
     MAX_CONCURRENCY_LIMIT: int = 10000
+    LOG_LEVEL: str = "INFO"
     
     class Config:
         env_file = ".env"
