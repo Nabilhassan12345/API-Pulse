@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional
+from schemas.auth import AuthConfig
 
 class ScenarioStep(BaseModel):
     name: str
@@ -15,3 +16,4 @@ class Scenario(BaseModel):
     steps: List[ScenarioStep]
     concurrency: int = Field(gt=0, le=10000)
     duration_seconds: Optional[int] = 60
+    auth: Optional[AuthConfig] = None
