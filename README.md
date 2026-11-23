@@ -2,7 +2,11 @@
   <img src="https://img.shields.io/badge/API-Pulse-FF3366?style=for-the-badge&logo=apache&logoColor=white" alt="API Pulse Logo" />
   
   <h1>⚡ API-Pulse</h1>
-  <p><b>An Open-Source, High-Performance API Load Testing Dashboard</b></p>
+  <p><b>An open-source API load-testing dashboard</b></p>
+
+
+<p align="center"><img src="docs/screenshots/live-test.gif" width="800" alt="API-Pulse running a live load test against a local FastAPI service"></p>
+
   
   <p>
     <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
